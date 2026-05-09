@@ -1,0 +1,20 @@
+---
+description: Project-wide coding constraints for DDDv2
+alwaysApply: true
+---
+
+# Project Constraints (Evidence-Based)
+
+- MUST keep app code in `apps/*/src` and shared abstractions in `core/*`.
+- MUST use path aliases from `tsconfig.json`: `@user/*`, `@trade/*`, `@core/*`, `@tests/*`.
+- MUST reuse existing stack primitives before introducing alternatives:
+  - CQRS: `@nestjs/cqrs`
+  - Repository + transaction base: `core/db/sql-repository.base.ts`
+  - DB driver: `slonik`
+  - Validation: `class-validator`, `zod`
+  - Result semantics: `oxide.ts`
+- MUST keep write flow as: aggregate -> repository -> domain event publish.
+- MUST keep API boundaries DTO-based and return response models from `core/api/*`.
+- MUST NOT access DB directly from controllers/resolvers/transport adapters.
+- MUST NOT bypass repository ports in command/query handlers.
+- MUST NOT introduce new frameworks/patterns when existing project primitives solve the problem.

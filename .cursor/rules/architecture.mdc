@@ -1,0 +1,32 @@
+---
+description: Architecture boundaries derived from current codebase
+alwaysApply: true
+---
+
+# Architecture Rules
+
+## System Shape
+
+- Monorepo with apps `apps/user`, `apps/trade`, plus shared `core`.
+- `apps/user` uses DDD + CQRS + repository layout (`domain`, `commands`, `queries`, `database`).
+
+## Layering (Aligned with `.dependency-cruiser.js`)
+
+- Domain MUST NOT depend on API/controller/DTO layers.
+- Domain MUST NOT depend on application handlers/services.
+- Domain MUST NOT depend on infrastructure implementations (ports/interfaces are allowed).
+- Infrastructure MUST NOT depend on API/controller/DTO layers.
+- Commands, queries, and handlers/services MUST NOT import API/controller/DTO layers.
+
+## Data & Persistence
+
+- Postgres access MUST go through repositories backed by `slonik`.
+- Write use cases that mutate aggregates MUST use repository `transaction()`.
+- Domain events MUST remain coupled to successful persistence via repository base flow.
+- No cross-app DB coupling: `apps/user` and `apps/trade` own separate app boundaries.
+
+## Communication
+
+- HTTP endpoints MUST map DTO -> command/query -> bus -> response DTO.
+- Message entrypoints MUST use `@MessagePattern` controllers and delegate to CQRS handlers.
+- Route/version constants SHOULD stay centralized in app config modules (for example `apps/user/src/configs/app.routes.ts`).

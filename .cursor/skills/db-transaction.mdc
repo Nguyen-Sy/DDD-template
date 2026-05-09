@@ -1,0 +1,23 @@
+---
+description: Apply transaction-safe persistence with repository base conventions
+---
+
+# Skill: Database Transaction
+
+Use for write operations that mutate one or more aggregates.
+
+## Checklist
+
+1. Start from repository port in application service/handler.
+2. Execute atomic writes inside repository `transaction(async () => { ... })`.
+3. Validate aggregate invariants before persistence (entity `validate()` flow).
+4. Persist using repository methods that inherit `SqlRepositoryBase` behavior.
+5. Let repository flow publish domain events after successful write.
+
+## Guardrails
+
+- No external API calls while transaction is open.
+- No direct DB pool use from controllers/handlers.
+- Keep query-only operations outside write transactions.
+- Preserve request context transaction connection behavior from `AppRequestContext`.
+- Do not add outbox-specific logic unless the project introduces an outbox module first.

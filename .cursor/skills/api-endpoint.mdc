@@ -1,0 +1,26 @@
+---
+description: Build HTTP/message/graphql endpoints consistent with current module patterns
+---
+
+# Skill: API Endpoint
+
+Use when adding HTTP controllers, GraphQL resolvers, or message controllers.
+
+## Checklist
+
+1. Keep transport adapter thin: request DTO -> command/query -> bus -> response DTO.
+2. Reuse route config modules for endpoint paths/versioning.
+3. Reuse standardized response wrappers from `core/api/*`.
+4. Add API metadata decorators for HTTP endpoints (`@ApiOperation`, `@ApiResponse`) where relevant.
+5. Keep transport-specific files separate (`*.http.controller.ts`, `*.graphql-resolver.ts`, `*.message.controller.ts`).
+
+## Validation
+
+- Validate input with DTOs and class validators.
+- Whitelist response fields in DTO mapping.
+
+## Guardrails
+
+- Do not place business logic or SQL in transport layer.
+- Do not call repositories directly from controllers/resolvers/message handlers.
+- Do not mix transport styles in one file (HTTP/GraphQL/message each in dedicated adapter file).

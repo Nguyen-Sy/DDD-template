@@ -1,0 +1,33 @@
+---
+description: TypeScript and NestJS style conventions for this repository
+alwaysApply: true
+---
+
+# Style Rules
+
+## TypeScript
+
+- Keep typing compatible with repo config (`strictNullChecks: true`).
+- Prefer explicit interfaces/types for DTOs, ports, and responses.
+- Use `tsconfig.json` aliases instead of deep relative imports.
+
+## NestJS Patterns
+
+- Register dependencies through modules/providers; use DI tokens for repositories.
+- Keep naming consistent with existing module patterns:
+  - Commands: `*.command.ts`
+  - Command handlers/services: `*.service.ts`
+  - Query handlers: `*.query-handler.ts`
+  - Controllers/resolvers: transport-specific files (`*.http.controller.ts`, `*.graphql-resolver.ts`, `*.message.controller.ts`)
+- Keep transport adapters thin: map request -> command/query, delegate to bus, map result -> response DTO.
+
+## Validation and Responses
+
+- Validate external input with DTO classes and validators.
+- Preserve DB runtime validation (`zod`) in repositories where row mapping occurs.
+- Return standardized response models from `core/api/*` plus feature DTO wrappers.
+
+## Formatting and Lint
+
+- Follow Prettier + ESLint config in `eslint.config.mjs`.
+- Do not add broad lint disables; scope exceptions to current file patterns only.

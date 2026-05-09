@@ -1,0 +1,23 @@
+---
+description: Generate application service/handler in this codebase style
+---
+
+# Skill: Service Generation
+
+Use for creating command handlers or application services in `apps/*/src/modules/*`.
+
+## Checklist
+
+1. Place handler/service in feature command/query folder (`commands/*` or `queries/*`).
+2. Inject dependencies via constructor and DI tokens for repository ports.
+3. Accept command/query objects, never transport DTOs directly.
+4. Keep business rules in domain entities/value objects.
+5. Persist via repository ports only.
+6. Wrap aggregate writes in repository `transaction()` when events are emitted.
+7. Return result types consistent with adjacent handlers (`Result`, DTO, or typed domain error).
+
+## Guardrails
+
+- No SQL in service/handler classes.
+- No transport concerns (HTTP status/decorators/pattern decorators) inside handlers.
+- No direct repository implementation imports; depend on ports/tokens.

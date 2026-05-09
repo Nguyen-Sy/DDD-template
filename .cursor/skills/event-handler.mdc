@@ -1,0 +1,27 @@
+---
+description: Implement safe domain/event handlers with current project patterns
+---
+
+# Skill: Event Handler
+
+Use when handling domain events emitted by aggregates.
+
+## Checklist
+
+1. Define/consume event classes in feature `domain/events/*`.
+2. Make handlers idempotent (safe on duplicate delivery).
+3. Persist state changes through repositories, never direct DB pool access.
+4. Wrap multi-write operations in a transaction boundary.
+5. Emit logs with request context when available.
+6. Keep side effects isolated and retry-safe.
+
+## Error Handling
+
+- Handle known domain/infrastructure conflicts explicitly.
+- Re-throw unknown errors to preserve global interception behavior.
+
+## Guardrails
+
+- Do not perform remote/network side effects inside active DB transaction blocks.
+- Do not publish events from transport adapters; publish from aggregate/repository flow.
+- Do not assume retry infrastructure exists; if retries are needed, implement them in the handler/module explicitly.
